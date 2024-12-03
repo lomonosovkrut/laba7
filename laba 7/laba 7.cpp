@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
+#include <stack>
 
 // Структура для представления списка смежности
 typedef struct Node {
@@ -43,30 +44,30 @@ void printAdjacencyMatrix(int n, int** adjMatrix) {
 
 // Функция для обхода графа в глубину (рекурсивная реализация)
 void depthFirstSearch(int n, int** adjMatrix, int* visited, int startVertex) {
-    visited[startVertex] = 1;
-    printf("%d ", startVertex);
+    visited[startVertex] = 1; // Отмечаем текущую вершину как посещенную
+    printf("%d ", startVertex); // Выводим индекс текущей вершины
 
     for (int i = 0; i < n; i++) {
         if (adjMatrix[startVertex][i] && !visited[i]) {
-            depthFirstSearch(n, adjMatrix, visited, i);
+            depthFirstSearch(n, adjMatrix, visited, i); // Рекурсивный вызов для смежной вершины
         }
     }
 }
 
 // Функция для обхода графа в глубину (нерекурсивная реализация)
 void depthFirstSearchIterative(int n, int** adjMatrix, int startVertex) {
-    int* visited = (int*)calloc(n, sizeof(int));
-    int* stack = (int*)malloc(n * sizeof(int));
+    int* visited = (int*)calloc(n, sizeof(int)); // Массив для отслеживания посещенных вершин
+    int* stack = (int*)malloc(n * sizeof(int)); // Стек для хранения вершин
     int top = -1;
 
-    visited[startVertex] = 1;
-    printf("%d ", startVertex);
-    stack[++top] = startVertex;
+    visited[startVertex] = 1; // Отмечаем стартовую вершину как посещенную
+    printf("%d ", startVertex); // Выводим индекс стартовой вершины
+    stack[++top] = startVertex; // Добавляем стартовую вершину в стек
 
-    while (top != -1) {
-        int currentVertex = stack[top];
-        int found = 0;
-
+    while (top != -1) { // Пока стек не пуст
+        int currentVertex = stack[top]; // Получаем вершину с вершины стека
+        int found = 0; // Флаг для проверки, найдена ли новая вершина
+        //проверяем, есть ли связь между текущей вершиной и вершиной i и была ли вершина i ранее посещена
         for (int i = 0; i < n; i++) {
             if (adjMatrix[currentVertex][i] && !visited[i]) {
                 visited[i] = 1;
@@ -86,6 +87,8 @@ void depthFirstSearchIterative(int n, int** adjMatrix, int startVertex) {
     free(stack);
 }
 
+
+
 // Функция для обхода графа в глубину (список смежности)
 void depthFirstSearchAdjacencyList(Node** adjList, int n, int startVertex) {
     int* visited = (int*)calloc(n, sizeof(int)); // Массив для отслеживания посещенных вершин
@@ -93,7 +96,7 @@ void depthFirstSearchAdjacencyList(Node** adjList, int n, int startVertex) {
     int top = -1; // Индекс вершины в стеке
 
     // Начало обхода с стартовой вершины
-    visited[startVertex] = 1;
+    visited[startVertex] = 1; // Отмечаем стартовую вершину как посещенную
     printf("%d ", startVertex);
     stack[++top] = startVertex;
 
@@ -142,6 +145,19 @@ void sortAdjacencyList(Node** adjList, int n) {
     }
 }
 
+void printAdjacencyList(Node** adjList, int n) {
+    printf("\n\nСписок смежности:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d: ", i); // Выводим номер вершины
+        Node* current = adjList[i]; // Указатель на начало списка смежности для вершины i
+        while (current != NULL) { // Проходим по всем узлам списка
+            printf("%d ", current->vertex); // Выводим вершину, смежную с i
+            current = current->next; // Переходим к следующему узлу
+        }
+        printf("\n"); // Переход на новую строку после вывода всех смежных вершин
+    }
+}
+
 
 int main() {
     setlocale(LC_ALL, "RUS");
@@ -169,15 +185,17 @@ int main() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (adjMatrix[i][j]) {
-                Node* newNode = (Node*)malloc(sizeof(Node));
-                newNode->vertex = j;
-                newNode->next = adjList[i];
+                Node* newNode = (Node*)malloc(sizeof(Node)); // Создаем новый узел
+                newNode->vertex = j;// Устанавливаем вершину
+                newNode->next = adjList[i]; // Добавляем узел
                 adjList[i] = newNode;
             }
         }
     }
     // Сортировка списка смежности
     sortAdjacencyList(adjList, n);
+    
+    printAdjacencyList(adjList, n);
 
     printf("\n\nОбход графа в глубину (список смежности):\n");
     depthFirstSearchAdjacencyList(adjList, n, 0);

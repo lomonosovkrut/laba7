@@ -1,3 +1,3 @@
 ﻿  laba 7.cpp
-D:\учёба\логика в ОА и ИЗ\laba7\laba 7\laba 7.cpp(21,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+D:\учёба\логика в ОА и ИЗ\laba7\laba 7\laba 7.cpp(22,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   laba 7.vcxproj -> D:\учёба\логика в ОА и ИЗ\laba7\laba 7\x64\Debug\laba 7.exe
